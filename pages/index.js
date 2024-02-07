@@ -1,19 +1,27 @@
 import { useState } from 'react';
 import Head from 'next/head';
+import Image from 'next/image'
+import dynamic from 'next/dynamic';
 
-import Fuse from 'fuse.js';
-import _ from 'lodash';
+// import Fuse from 'fuse.js';
+// import _ from 'lodash';
 
 import styles from '../styles/Home.module.css';
-import CodeSampleModal from '../components/CodeSampleModal';
+
+// import CodeSampleModal from '../components/CodeSampleModal';
+const CodeSampleModal = dynamic(
+  () => import('../components/CodeSampleModal'),
+  { ssr: false }
+)
 
 export default function Start({ countries }) {
   const [results, setResults] = useState(countries);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const fuse = new Fuse(countries, {
-    keys: ['name'],
-    threshold: 0.3,
-  });
+
+  // const fuse = new Fuse(countries, {
+  //   keys: ['name'],
+  //   threshold: 0.3,
+  // });
 
   return (
     <div>
@@ -33,7 +41,12 @@ export default function Start({ countries }) {
         </h1>
 
         <div className={styles.heroImage}>
-          <img src="large-image.jpg" alt="Large Image" />
+          <Image
+            src="/large-image.jpg"
+            alt="Large Image"
+            width={3048}
+            height={2024}
+          />
         </div>
 
         <div>
@@ -42,12 +55,21 @@ export default function Start({ countries }) {
             type="text"
             placeholder="Country search..."
             className={styles.input}
-            onChange={async (e) => {
+            onChange={async e => {
               const { value } = e.currentTarget;
+
+              // dynamically load libraries
+              const Fuse = (await import('fuse.js')).default
+              const lodashNow = (await import('lodash.now')).default
+
+              const fuse = new Fuse(countries, {
+                keys: ['name'],
+                threshold: 0.3
+              })
 
               const searchResult = fuse
                 .search(value)
-                .map((result) => result.item);
+                .map(result => result.item);
 
               const updatedResults = searchResult.length
                 ? searchResult
@@ -56,7 +78,7 @@ export default function Start({ countries }) {
 
               // Fake analytics hit
               console.info({
-                searchedAt: _.now(),
+                searchedAt: lodashNow(),
               });
             }}
           />
@@ -75,11 +97,20 @@ export default function Start({ countries }) {
         <div className={styles.codeSampleBlock}>
           <h2 className={styles.secondaryHeading}>Code Sample</h2>
           <p>Ever wondered how to write a function that prints Hello World?</p>
-          <button onClick={() => setIsModalOpen(true)}>Show Me</button>
-          <CodeSampleModal
-            isOpen={isModalOpen}
-            closeModal={() => setIsModalOpen(false)}
-          />
+          <button
+            onClick={() => setIsModalOpen(true)}
+          >
+            Show Me
+          </button>
+
+          {
+            isModalOpen &&
+            <CodeSampleModal
+              isOpen={isModalOpen}
+              closeModal={() => setIsModalOpen(false)}
+            />
+          }
+
         </div>
       </main>
 
@@ -91,7 +122,12 @@ export default function Start({ countries }) {
         >
           Powered by
           <span className={styles.logo}>
-            <img src="/vercel.svg" alt="Vercel Logo" />
+            <Image
+              src="/vercel.svg"
+              alt="Vercel Logo"
+              width={72}
+              height={16}
+            />
           </span>
         </a>
       </footer>

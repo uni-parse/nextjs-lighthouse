@@ -4,9 +4,9 @@ dependencies:
   fuse.js:
     specifier: ^6.6.2
     version: 6.6.2
-  lodash:
-    specifier: ^4.17.21
-    version: 4.17.21
+  lodash.now:
+    specifier: ^4.0.2
+    version: 4.0.2
   next:
     specifier: latest
     version: 13.4.12(react-dom@18.2.0)(react@18.2.0)
@@ -233,8 +233,9 @@ packages:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
     dev: false
 
-  /lodash@4.17.21:
-    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+  /lodash.now@4.0.2:
+    resolution: {integrity: sha512-G4OO0/2lI5TSBoDDz0abjf8PCjIXUoIIW0B+3jHoxsT1vtDjmEFgHRSw3buDmoZQcC808nS+kK/7dVEKsj9W6g==}
+    deprecated: This package is deprecated. Use Date.now.
     dev: false
 
   /loose-envify@1.4.0:
